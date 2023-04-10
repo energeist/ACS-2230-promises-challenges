@@ -7,14 +7,25 @@
  *    it runs? Run the code using `node challenge2.js` and verify that your
  *    expectation was correct.
  * 
+ * The code should execute the greet() function first with 'Ducky' as an argument, which should resolve successfully and return "Hello there, Ducky", which it does.
+ * Next, it will execute the code in the .then() block which calls uppercaser() on "Make School is Awesome!!!" which should
+ * resolve successfully and return the input string in allcaps, which it does.
+ * 
+ * This is indeed how the code executes.
  * 
  * 2. What happens if greet() fails? Make it fail by changing 'name' to a number
  *    instead of a string. What happens? Does uppercaser() still run?
  * 
+ *  If greet() fails and the Promise is rejected, it should trigger the .catch() block of the execution code, which will console.log "Received an error!".
+ *  Next, the error that was caught will be printed, which will be the reject() block from the Promise in greet(), which returns the message "Name must be a string".
+ *  Uppercaser() does not run because the first Promise in the promise chain has failed. The code skips to the .catch() block in the case of an error (rejected Promise).
  * 
  * 3. What happens if greet() succeeds and uppercaser() fails? Modify your code
  *    to achieve this result by changing the values of 'name' and 'my_str' and
  *    run the code again.
+ * 
+ * greet() will execute successfully and return "Hello there, Ducky", followed by the .catch() block receiving the rejected Promise text.  The .catch() block will
+ * log "Received an error!", followed by logging the error, which is the .reject() block returning "Argument to uppercaser must be string".
  * 
  * 
  * 4. Write a method that takes a string as input and returns the input string
@@ -63,8 +74,19 @@ function uppercaser(str) {
     });
 }
 
+const spacer = (str) => {
+  return new Promise(function(resolve, reject) {
+    setTimeout(function() {
+      typeof str === 'string'
+      ? resolve(str.split("").join(" "))
+      : reject('Argument to spacer must be a string')
+    }, 1500);
+  });
+}
+
 name = 'Ducky'
 my_str = 'Make School is Awesome!!!'
+another_str = 'foo'
 
 greet(name)
     .then((greetResult) => {
@@ -73,6 +95,10 @@ greet(name)
     })
     .then((uppercaserResult) => {
         console.log(uppercaserResult)
+        return spacer(another_str);
+    })
+    .then((spacerResult) => {
+      console.log(spacerResult)
     }).catch((err) => {
         console.log('Received an error!')
         console.log(err);

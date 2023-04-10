@@ -6,14 +6,21 @@
  * 1. Read over the code that follows. In what order will the outputs "Step 1",
  *    "Step 2", and "Step 3" be printed? How do you know?
  * 
+ * They will be printed as Step 1 -> Step 3 -> Step 2.  setTimeout creates a promise object that triggers a callback
+ * of action() after the timer of 2000ms has elapsed
  * 
  * 2. Run this code using `node challenge1.js`. In what order were the steps
  *    printed?
  * 
+ *  Step 1 -> Step 3 -> Step 2
  * 
  * 3. Change the delay time in the `snooze` function from 2000 ms to 0. In what
  *    order will the steps be printed now? Why? Re-run the code again to verify
  *    your expectation. Were you correct?
+ * 
+ * My initial assessment was that the order would be Step 1 -> Step 2 -> Step 3, but this is incorrect.
+ * The order is still Step 1 > Step 2 > Step 3 because of the way that the event loop in JS handles code execution
+ * Synchronous code is executed before the resolution of asynchronous code executed with a Promise, so 
  * 
  *******************************************************************************
  */
@@ -22,7 +29,7 @@
 function snooze(action) {
     setTimeout(function() {
       action();
-    }, 2000);
+    }, 0);
 }
 console.log('Step 1');
 
